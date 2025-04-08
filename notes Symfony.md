@@ -474,7 +474,430 @@ Dans la méthode new du controller :
 
 # Sauvegarder des données en base.
 
-# EntityManager
+# EntityManager.
+Le point d’entrée unique de toutes vos opérations d’écriture en base de données.
+
+# L'injection de dépendances.
+Dans Symfony, nous n’instancions plus les dépendances dont nous avons besoin, nous les demandons.
+
+Plus simple, car nos dépendances ont souvent elles-mêmes des dépendances, qui ont des dépendances, etc.
+
+Pas avoir deux connexions à la base de données en même temps.
+
+Plutôt que d’instancier une classe concrète, nous allons demander un objet qui réponde à une interface. Comme ça, si la classe concrète change de nom, ça ne changera pas notre code, du moment que la nouvelle respecte l’interface.
+
+Demander n’importe quel objet disponible dans l'application simplement en typant les arguments des méthodes.
+
+Dans n’importe quelle méthode d’une classe de controller, ou même dans son constructeur, demander un objet et Symfony le donne.
+
+
+# Sauvegarder les changements en BD.
+Pour indiquer à l'EntityManager qu’il doit prendre en compte une nouvelle entité, il suffit de la passer à sa méthode "persist".
+Indiquer à l’EntityManager que le travail est fini grâce à la méthode "flush".
+
+L’EntityManager dispose d’une méthode "remove". Elle s’utilise comme "persist", en lui passant l’objet à supprimer, et appeler "flush"  pour valider le changement.
+
+Lorsque l’utilisateur soumet son formulaire, une nouvelle ligne est ajoutée en base de données, et la page du formulaire est affichée à nouveau… avec les données préremplies dans le formulaire, qui peut être de nouveau soumis avec les mêmes données. Pour éviter cela, envoyer une redirection à l’utilisateur, quitte à le rediriger vers la même page. Cela forcera son navigateur à effectuer une nouvelle requête, vierge de toute donnée, ce qui videra le formulaire. $this->redirectToRoute() à laquelle on fournit un nom de route.
+
+??? : Notre relation Book-Author est une ManyToMany. Dans le cadre de ces relations un peu spéciales, si vous avez défini la relation côté Author, ajouter un auteur côté Book risque de ne produire aucun effet. Pour corriger ce problème, rendez-vous dans le FormType de votre entité non propriétaire, et ajoutez une option by_reference définie à  false  sur le champ représentant la relation :
+
+```php
+<?php
+class BookType extends AbstractType
+{
+public function buildForm(FormBuilderInterface $builder, array $options): void
+{
+$builder
+// …
+->add('authors', EntityType::class, [
+'class' => Author::class,
+'choice_label' => 'name',
+'multiple' => true,
+'by_reference' => false,
+])
+// …
+```
+
+# En résumé.
+- l’EntityManager de Doctrine est l’objet qui sert de point d’entrée pour toutes les écritures en base de données,
+- il fonctionne par transaction : les entités doivent être passées à "persist" avant de pouvoir "flush" toutes los opérations,
+- pour l’utiliser dans un controller, demander un argument typé "Doctrine\Orm\EntityManagerInterface".
+
+
+# -------------------
+# Valider des données
+# -------------------
+
+# Composant Validator.
+Peut fonctionner seul de manière totalement indépendante, en mode standalone, OU BIEN incorporé au composant "Form".
+
+## Utilisation en standalone :
+Ajouter un argument typé avec l’interface "Symfony\Component\Validator\Validator\ValidatorInterface" au controller.
+Appeler la méthode "validate" sur l'objet à valider. Vous recevez une liste d’erreurs. Si elle est vide, c’est que tout va bien. 
+
+```php
+<?php
+    #[Route('/validate', name: 'app_admin_book_validate')]
+    public function validate(ValidatorInterface $validator): Response
+    {
+        // ...
+        // $book est un objet Book que nous voulons valider, peu importe sa provenance
+        $errors = $validator->validate($book);
+        if (0 < \count($errors)) {
+            // Gérer les erreurs
+        }
+        // ...
+    }
+```
+
+ $form->isValid() n’est rien d’autre qu’un appel au composant "Validator".
+
+Appliquer des contraintes de validation sur les données à valider. Ce sont des classes qui ne contiennent pas de logique, seulement un message d’erreur. Toutes associées à un "ConstraintValidator" qui leur est spécifique.
+Appliquer des contraintes sur les objets. Puis, quand on demande au Validator de valider un objet, il va lire les contraintes associées, et va appeler les "ConstraintValidator" correspondants.
+
+Deux façons de faire : directement sur un objet, dans un FormType.
+Mettre les contraintes en priorité sur les objets.
+
+# Directement sur un objet.
+
+namespace Symfony\Component\Validator\Constraints, qu’on a coutume d’aliaser en tant que Assert.
+
+NotBlank : la contrainte par défaut de la plupart des champs de formulaires requis, elle vérifie que le champ n’est pas  null,  false , ni une chaîne de caractères vides (comme des espaces).
+
+Length.
+
+Email.
+
+EqualTo / GreaterThan / LowerThan.
+
+Choice.
+
+AtLeastOneOf : prend en paramètre un array d’autres contraintes, et valide la donnée si au moins une de celles-ci est valide.
+
+Si le champ est null, la plupart des contraintes ne vérifient pas la valeur et considèrent que tout va bien. Combinez-les avec NotBlank ou NotNull si le champ est obligatoire.
+
+## Contraindre la validation d'une entité.
+```php
+<?php
+// …
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+
+#[UniqueEntity(['name'])] // <--- CONTRAINTE
+#[ORM\Entity(repositoryClass: AuthorRepository::class)]
+class Author
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+    
+    #[Assert\Length(min: 10)] // <--- CONTRAINTE
+    #[Assert\NotBlank()]
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
+    
+    #[Assert\NotBlank()] // <--- CONTRAINTE
+    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    private ?\DateTimeImmutable $dateOfBirth = null;
+    
+    #[Assert\GreaterThan(propertyPath: 'dateOfBirth')] // <--- CONTRAINTE
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $dateOfDeath = null;
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $nationality = null;
+    
+    #[ORM\ManyToMany(targetEntity: Book::class, mappedBy: 'authors')]
+    private Collection $books;
+    // …
+}
+```
+
+Pour des messages d'erreur en français :
+config/packages/translations.yaml :
+```yaml
+framework:
+    default_locale: fr
+    translator:
+        default_path: '%kernel.project_dir%/translations'
+        fallbacks:
+            - fr
+        # …
+```
+
+# Dans un FormType.
+
+- Il y a des FormTypes qui ne sont pas basés sur des entités.
+
+- Dans un FormType basé sur une entité, il peut y avoir des champs qui ne correspondent pas aux propriétés de votre entité; iil faut l'indiquer à Symfony. Dans le tableau d'options à passer en troisième paramètre à la fonction $builder->add(), ajouter une option 'mapped' => false. Y ajouter ensuite des contraintes de validation, directement dans le FormType, grâce à l'option 'constraints' => []  qui prend comme valeur un tableau des contraintes, instanciées avec le mot-clé new .
+
+```php
+<?php
+// …
+use Symfony\Component\Validator\Constraints as Assert;
+// …
+class BookType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+        // …
+            ->add('certification', CheckboxType::class, [
+                'mapped' => false,
+                'label' => "Je certifie l'exactitude des informations fournies",
+                'constraints' => [
+                    new Assert\IsTrue(message: "Vous devez cocher la case pour ajouter un livre."),
+                ],
+            ])
+    // …
+```
+
+# En résumé :
+- le composant Validator permet d’appliquer des contraintes de validation sur les entités et les formulaires.
+
+- cette validation est indépendante de la validation HTML et plus sécurisée.
+
+- la bonne pratique est de mettre les contraintes sur les entités.
+
+- si c’est impossible, vous pouvez en mettre directement sur un "FormType".
+
+- la méthode $form->isValid() permet d’appeler le Validator sur un formulaire et sur l’entité qui y est rattachée.
+
+- le Validator peut aussi être utilisé seul si on ne valide pas un formulaire.
+
+
+
+# ----------------------
+# Lire les données en BD
+# ----------------------
+
+# Récupérer les entités avec les repositories.
+ Lorsque vous récupérez une entité, Doctrine fait automatiquement les jointures avec les entités qui lui sont liées, et vous recevez tous vos objets.
+
+ # Les méthodes des repositories.
+ find : id en argument, entité en retour.
+
+ findOneBy : tableau de critères en argument pour effectuer une requête WHERE.
+
+ findAll : les entités d'un certain type.
+
+ findBy :
+ le même tableau de critères que findOneBy,
+ tableau optionnel construit de la même manière pour ajouter une clause  ORDER BY,
+ paramètre optionnel LIMIT,
+ un paramètre optionnelS OFFSET.
+
+ count(array $criteria): int : méthode de comptage.
+ 
+# Aficher une liste d'objets.
+{% for [valeur] in [array] %}...{% endfor %}
+
+{% for [clé], [valeur] in [array] %} … {% endfor %}
+
+{% else %}
+
+Pour accéder aux propriétés d’un objet ou d’un tableau en Twig, utilisez un point.
+
+# Utiliser le routing pour récupérer une entité spécifique.
+Une nouvelle méthode dans Admin\AuthorController : show(). Le template templates/admin/author/show.html.twig .
+
+```php
+<?php
+#[Route('/{id}', name: 'app_admin_author_show', methods: ['GET'])]
+public function show(int $id): Response
+```
+
+Ajout de 'requirements' :
+```php
+<?php
+#[Route('/{id}', name: 'app_admin_author_show', requirements: ['id' => '\d+'], methods: ['GET'])]
+public function show(int $id): Response
+```
+
+Reste à demander en paramètre l'AuthorRepository  et à nous servir de sa méthode "find($id)" pour récupérer l’auteur qui correspond à cet identifiant …
+
+OU BIEN : profiter de la puissance de Symfony et de "EntityValueResolver", qui va directement aller chercher notre entité en fonction de l’identifiant passé dans l’URL. Pour ce faire, remplacez votre argument id dans la méthode du controller par un argument typé de la classe de l'entité.
+
+```php
+<?php
+#[Route('/{id}', name: 'app_admin_author_show', requirements: ['id' => '\d+'], methods: ['GET'])]
+public function show(?Author $author): Response
+```
+Noter le point d’interrogation devant Author.
+
+# Afficher l'entité grâce à twig.
+
+passer notre variable $author à Twig pour aller l’afficher.
+```php
+<?php
+#[Route('/{id}', name: 'app_admin_author_show', requirements: ['id' => '\d+'], methods: ['GET'])]
+public function show(?Author $author): Response
+{
+    return $this->render('admin/author/show.html.twig', [
+        'author' => $author,
+    ]);
+}
+```
+
+```php
+<div class="example-wrapper">
+    <h1>Auteur : </h1>
+    {% if author is not null %}
+        <div class="card mb-1 m-auto">
+            <div class="card-body">
+                <div class="card-title d-flex justify-content-between">
+                    <h4 class="mb-1">{{ author.name }}</h4>
+                    <small class="text-muted">Identifiant : {{ author.id }}</small>
+                </div>
+                <div class="d-flex justify-content-between card-text">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Date de naissance : {{ author.dateOfBirth }}</li>
+                        <li class="list-group-item">Date de décès : {{ author.dateOfDeath }}</li>
+                    </ul>
+                    <p><small>Nationalité : {{ author.nationality }}</small></p>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div>Auteur non trouvé</div>
+    {% endif %}
+</div>
+```
+
+# Utiliser les filtres et fonctions de twig pour afficher des données complexes.
+Rajouter une barre verticale derrière le nom de la variable à filtrer, suivie du nom du filtre.
+
+```php
+<li class="list-group-item">Date de naissance : {{ author.dateOfBirth|date('d M Y') }}</li>
+```
+
+```php
+<li class="list-group-item">Date de décès : {{ author.dateOfDeath is not null ? author.dateOfDeath|date('d M Y') : '-' }}</li>
+```
+
+# twig et internationalisation.
+symfony composer require twig/intl-extra
+
+```php
+<p><small>Nationalité : {{ author.nationality|country_name }}</small></p>
+```
+
+# Utiliser la fonction path pour ajouter de la navigation.
+Twig dispose d’une fonction spéciale, path :
+en premier paramètre le nom d’une route de l'application,
+en second paramètre optionnel les paramètres à passer à cette route.
+
+```php
+<div class="card-title d-flex justify-content-between">
+    <a href="{{ path('app_admin_author_show', {id: author.id}) }}" class="stretched-link link-dark">
+        <h4 class="mb-1">{{ author.name }}</h4>
+    </a>
+    <small class="text-muted">Identifiant : {{ author.id }}</small>
+</div>
+```
+
+```php
+<a href="{{ path('app_admin_author_index') }}" class="btn btn-primary">Retour</a>
+```
+
+# Le QueryBuilder de Doctrine.
+Appeler des méthodes très expressives sur un objet QueryBuilder, comme where() ou même join(). Ensuite, lorsque nous demanderons à récupérer notre requête avec getQuery(), il construira la requête tout seul à partir de ce que nous avons demandé.
+
+Une méthode de repository existe pour générer un objet QueryBuilder : createQueryBuilder( "première lettre de l'entité" );
+
+```php
+<?php
+public function findByDateOfBirth(array $dates = []): array
+{
+    $qb = $this->createQueryBuilder('a');
+    
+    if (\array_key_exists('start', $dates)) {
+        $qb->andWhere('a.dateOfBirth >= :start')
+            ->setParameter('start', new \DateTimeImmutable($dates['start']));
+    }
+    
+    if (\array_key_exists('end', $dates)) {
+        $qb->andWhere('a.dateOfBirth <= :end')
+            ->setParameter('end', new \DateTimeImmutable($dates['end']));
+    }
+    
+    return $qb->orderBy('a.dateOfBirth', 'DESC')
+            ->getQuery()
+            ->getResult();
+}
+```
+
+# Utiliser des méthodes de requêtes personnalisées.
+Dans le controller on utilise la nouvelle méthode écrite du repository :
+
+```php
+<?php
+#[Route('', name: 'app_admin_author_index', methods: ['GET'])]
+public function index(Request $request, AuthorRepository $repository): Response
+{
+    $dates = [];
+    if ($request->query->has('start')) {
+        $dates['start'] = $request->query->get('start');
+    }
+    
+    if ($request->query->has('end')) {
+        $dates['end'] = $request->query->get('end');
+    }
+    
+    $authors = $repository->findByDateOfBirth($dates);
+    // Le reste ne change pas
+```
+
+# Pagination avec PagerFanta.
+
+à revoir ...
+
+# Formulaire d'édition pour les entités.
+
+Combiner les routes dynamiques avec les formulaires.
+
+```php
+<?php
+#[Route('/new', name: 'app_admin_author_new', methods: ['GET', 'POST'])]
+#[Route('/{id}/edit', name: 'app_admin_author_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+public function new(?Author $author, Request $request, EntityManagerInterface $manager): Response
+```
+Deux routes pour le même controller : /admin/author/new, la variable $author vaudra null ; /admin/author/<identifiant>/edit, Symfony ira chercher en base de données l’auteur correspondant et le mettra dans $author.
+
+```php
+<?php
+public function new(?Author $author, Request $request, EntityManagerInterface $manager): Response
+{
+    $author ??= new Author();
+    // …
+```
+
+# La variable app.
+Toujours disponible dans tous les templates.
+
+```php
+{% extends 'base.html.twig' %}
+
+{% set action = app.current_route == 'app_admin_author_new' ? 'Ajout' : 'Édition' %}
+
+{% block title %}{{ action }} d'auteur{% endblock %}
+
+{% block body %}
+    {# … #}
+    <div class="example-wrapper">
+        <h1>{{ action }} d'auteur</h1>
+        {# … #}
+```
+
+# En résumé :
+- les Repositories sont le point d’entrée pour les lectures en base de données.
+
+- il en existe généralement un par entité de notre application.
+
+- ils disposent de 5 méthodes de base pour lire notre base de données :  find  ,  findOneBy  ,  findBy  ,  findAll   et  count  .
+
+- vous pouvez rajouter des méthodes personnalisées pour vos besoins spécifiques. Ces méthodes spécifiques utiliseront le plus souvent le QueryBuilder pour construire vos requêtes en base de données.
 
 
 
