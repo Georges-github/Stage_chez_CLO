@@ -901,3 +901,200 @@ Toujours disponible dans tous les templates.
 
 
 
+# ------------------------
+# Définir les utilisateurs
+# ------------------------
+
+# La sécurité des applications web.
+- la requête vise-t-elle une route de notre application ?
+- cette route est-elle protégée ?
+- authentification - HTTP 401 Unauthorized
+- autorisation - HTTP 403 Forbidden
+
+Le sujet de toutes les questions de sécurité, c’est l’utilisateur. L’objet central de la sécurité, et il va avoir besoin d’une représentation particulière dans notre application.
+
+# Représenter les utilisateurs avec l'interface UserInterface.
+Symfony\Component\Security\Core\User\UserInterface.
+
+Définit les méthodes obligatoires qui seront utilisées par le système de sécurité, mais ne définit pas de moyen de gérer les mots de passe. Donc  implémenter une seconde interface la classe d’utilisateur : Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface.
+
+UserInterface :
+- getUserIdentifier retourne la chaîne de caractères qui identifie l'utilisateur quand il se connecte.
+- getRoles retourne un array de chaînes de caractères appelées rôles, qui permet d’aider à déterminer les droits de l’utilisateur.
+- eraseCredentials sert à éviter de garder en mémoire le mot de passe de l’utilisateur avant hachage, mais ce n’est pas obligatoire.
+
+PasswordAuthenticatedUserInterface :
+- getPassword récupère le mot de passe haché.
+
+Rien n'empêche d’implémenter ces interfaces sur une entité, c’est même tout à fait classique.
+
+# Générer une classe User.
+- MakerBundle propose une commande make:user pour générer une classe qui implémente  UserInterface.
+- Grâce à cette commande, on peut implémenter PasswordAuthenticatedUserInterface ou non.
+- On peut aussi choisir de faire de votre classe une entité ou non.
+- Gère les changements à apporter à la configuration de sécurité dans config/packages/security.yaml .
+
+Ne pas oublier d'effectuer une nouvelle migration (symfony console make:migation) , et d'appliquer cette migration (symfony console doctrine:migrations:migrate).
+
+# Récupérer les utilisateurs en BD.
+config/packages/security.yaml :
+
+```yaml
+security:
+# …
+    providers:
+    # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider: # Un provider,
+            entity: # qui est de type entité;
+                class: App\Entity\User # c'est celui-ci,
+                property: username # et username est la propriété de l'entité pour retrouver l'utilisateur.
+            # …
+```
+
+## Provider.
+Authentification, autorisation.
+
+Authentification en deux temps :
+- vérifier qu'un utilisateur ayant l'identifiant spécifié dans la requête, existe dans la BD : UserProvider cherchent dans leur source de données l'utilisateur ayant l'identifiant spécifié.
+- vérifier le mot de passe.
+
+Quatre types de providers dans Symfony.
+
+Clef providers: on peut spécifier un provider pour chaque source de données.
+
+```php
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\Column(length: 180, nullable: true)]
+    private ?string $username = null;
+
+    /**
+     * @var list<string> The user roles
+     */
+    #[ORM\Column]
+    private array $roles = [];
+
+    #[Assert\NotCompromisedPassword()]
+    #[Assert\PasswordStrength(minScore: Assert\PasswordStrength::STRENGTH_STRONG)]
+    #[Assert\Regex('/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,32}$/')]
+    #[ORM\Column]
+    private ?string $password = null;
+
+    #[Assert\NotBlank()]
+    #[ORM\Column(length: 255)]
+    private ?string $firstname = null;
+
+    #[Assert\NotBlank()]
+    #[ORM\Column(length: 255)]
+    private ?string $lastname = null;
+
+    #[Assert\Email()]
+    #[Assert\NotBlank()]
+    #[ORM\Column(length: 255, unique: true)]
+    private ?string $email = null;
+```
+
+```yaml
+security:
+    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+    providers:
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+```
+
+
+# En résumé :
+- Authentification. Autorisation.
+- Pour représenter l’utilisateur qui déclenche une requête, Symfony a besoin d’un objet qui implémente UserInterface.
+- UserProvider.
+- Symfony embarque nativement plusieurs types de UserProviders, dont le type entité qui cherche les utilisateurs en base de données.
+
+
+# ----------------------------------
+# Mettre en place l'authentification
+# ----------------------------------
+
+# Le point d'entrée d'authentification.
+UserProvider.
+Authenticator.
+
+Le firewall est donc l’objet qui appellera d’abord notre UserProvider, puis un Authenticator.
+
+```yaml
+security:
+# …
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false # Aucune vérification de sécurité ne sera effectué sur les routes correpondantes au pattern.
+        main:
+            lazy: true
+            provider: app_user_provider
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#the-firewall
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+```
+
+ Chaque firewall s’applique uniquement aux URL correspondant à la clé pattern de sa configuration. Si vous ne renseignez pas de pattern, le firewall s’applique à toute l’application.
+
+Symfony applique le premier firewall qui correspond au chemin et n’applique pas les suivants.
+
+"lazy: true" le firewall forcera l'authentification que si on demande une vérification de droits quelque part. Sinon, le firewall ne fera rien.
+
+"make:user" a rajouté le nom du UserProvider à la clé provider du firewall main.
+
+# Sécuriser les mots de passe avec les hacheurs.
+- Générer rapidement une ébauche de formulaire d'enregistrement grâce à la commande "make:registration-form".
+- La commande ajoute un attribut pour s'assurer de l'unicité de chaque utilisateur en base de données.
+- La commande génère aussi un FormType adapté qui prend en paramètre le mot de passe de l'utilisateur en clair.
+- Le controller généré fait ensuite appel à un objet pour hacher ce mot de passe.
+
+ Générer rapidement une ébauche de formulaire d'enregistrement grâce à la commande "make:registration-form" .
+ La commande ajoute un attribut pour s'assurer de l'unicité de chaque utilisateur en BD.
+ La commande génère aussi un FormType adapté qui prend en paramètre le mot de passe de l'utilisateur en clair.
+
+Dans le fichier "src/Form/RegistrationFormType.php" qui a été généré, supprimer la case à cocher agreeTerms; le formulaire ne sera pas public.
+plainPassword n'est pas mappé.
+
+```php
+$pwd = $form->get('plainPassword')->getData()
+UserPasswordHasherInterface $userPasswordHasher->hashPassword( $utilisateur , $pswd );
+$user->setPassword();
+```
+
+config/packages/security.yaml
+```yaml
+security:
+    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+```
+L’endroit où choisir de quelle façon hacher les mots de passe de chaque classe d'utilisateur.
+'auto' : laisser Symfony choisir l'algorithme de hachage pour toutes les classes qui implémentent PasswordAuthenticatedUserInterface.
+
+Symfony choisit par défaut un algorithme appelé BCRYPT, car il offre le meilleur rapport sécurisation versus temps de génération.
+
+# Authentifier les utilisateur via un formulaire.
+Symfony embarque nativement un nombre assez important d’Authenticators.
+
+La commande "make:security:form-login" vous permet de créer facilement une page de login et un logout.
+Elle met à jour la configuration dans "config/packages/security.yaml".
+Vous devez tout de même compléter la configuration du logout avec le nom d'une route vers laquelle rediriger les utilisateurs déconnectés.
+
+# En résumé :
+Les Firewalls gèrent l’authentification dans nos applications.
+Ils agissent en deux temps : les UserProviders récupèrent l’utilisateur, et l’Authenticator vérifie son identité.
+Les UserPasswordHashers permettent de transformer les mots de passe utilisateur en les rendant illisibles pour plus de sécurité.
+
+
+
