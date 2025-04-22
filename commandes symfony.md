@@ -25,4 +25,44 @@ symfony console doctrine:fixtures:load
 
 
 
+🚀 1. Symfony Notifier (composant natif) + Provider
+
+Symfony a son propre composant pour ça : symfony/notifier, qui gère les notifications via SMS, email, chat, etc. Tu peux l’utiliser avec plusieurs fournisseurs (providers) comme Twilio, Nexmo (Vonage), ou d'autres.
+✅ Avantages :
+
+    Intégré au framework Symfony
+
+    Unifié pour SMS, email, Slack, etc.
+
+    Bien documenté
+
+📦 Installation de base :
+
+composer require symfony/notifier
+
+➕ Exemple avec Twilio (pour SMS & WhatsApp) :
+
+composer require symfony/twilio-notifier
+
+Dans ton .env :
+
+TWILIO_DSN=twilio://SID:TOKEN@default?from=TON_NUMÉRO
+
+Ensuite, dans ton code :
+
+use Symfony\Component\Notifier\NotifierInterface;
+use Symfony\Component\Notifier\Notification\Notification;
+use Symfony\Component\Notifier\Recipient\SmsRecipient;
+
+$notification = new Notification('Hello from Symfony!', ['sms']);
+$recipient = new SmsRecipient('+33612345678');
+
+$notifier->send($notification, $recipient);
+
+    ⚠️ Pour WhatsApp avec Twilio, il faut activer leur sandbox, et les messages s’envoient vers des numéros vérifiés. DSN WhatsApp ressemble à :
+
+TWILIO_DSN=twilio://SID:TOKEN@default?from=whatsapp:+14155238886
+
+
+
 
