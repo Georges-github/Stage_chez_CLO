@@ -23,6 +23,10 @@ symfony console doctrine:migrations:migrate
 
 symfony console doctrine:fixtures:load
 
+symfony console make:security:form-login
+
+
+
 
 
 🚀 1. Symfony Notifier (composant natif) + Provider

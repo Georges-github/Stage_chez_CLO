@@ -1097,4 +1097,123 @@ Ils agissent en deux temps : les UserProviders récupèrent l’utilisateur, et 
 Les UserPasswordHashers permettent de transformer les mots de passe utilisateur en les rendant illisibles pour plus de sécurité.
 
 
+# -----------------------------------------
+# Gérer les authorisations des utilisateurs
+# -----------------------------------------
+
+# Accorder des droits avec AccessControl.
+Demander à vérifier des conditions pour que l’application réponde à des requêtes spécifiques.
+
+Mécanisme des Voters : petits services qui ne peuvent répondre qu’à une seule question de sécurité bien précise.
+
+# Demander un contrôle d'accès : isGranted.
+
+```php
+Depuis un Controller :
+$this->isGranted( [ ... ] )
+$this->denyAccessUnlessGranted( [ ... ] ) lance une exception si l’utilisateur n’a pas le droit.
+#[ IsGrante( [ ... ] ) ] sur la méthode de Controller; lance une exception si l’utilisateur n’a pas le droit.
+```
+
+Depuis une autre classe :
+    Injecter dans le constructeur __construct un objet :
+```php
+        Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface $checker;
+        $this->checker->isGranted([...]);
+```
+```php
+        Symfony\Bundle\SecurityBundle\Security $security;
+        $this->security->isGranted([...]);
+
+        Aussi pour récupérer l’utilisateur actuellement connecté : $security->getUser();
+```
+
+Depuis un template :
+is_granted( [ ... ] ) renvoie true ou false.
+
+Les vérifications les plus simples :
+    l'utilisateur est-il connecté
+        IS_AUTHENTICATED vérifie qu'un utilisateur est connecté.
+        IS_AUTHENTICATED_REMEMBERED
+        IS_AUTHENTICATED_FULLY ne laisse passer que les utilisateurs qui se sont connectés activement au cours de cette session.
+        IS_REMEMBERED ne laisse passer que les utilisateurs connectés depuis une session de cookie “remember me”.
+        PUBLIC_ACCESS
+
+    l'utilisateur a t-il un rôle spécifique
+
+ Les attributs #[IsGranted] et #[Route], peuventt s’utiliser sur l’ensemble d’une classe de controller. Ceci permet de restreindre l’ensemble des routes de la classe d’un coup.
+
+ Un rôle est une chaîne de caractères en majuscules et qui commence par  ROLE_ .
+ Les rôles sont stockés sur les utilisateurs dans une propriété 'roles', qui est un array de chaînes de caractères.
+
+
+# Personnaliser les droits d'accès.
+
+## La hiérarchie des rôles.
+
+```yaml
+config/packages/security.yaml
+
+security:
+# …
+    role_hierarchy:
+        ROLE_USER: ~
+        ROLE_MODERATEUR: ROLE_USER
+        ROLE_AJOUT_DE_LIVRE: ROLE_USER
+        ROLE_EDITION_DE_LIVRE: ROLE_AJOUT_DE_LIVRE
+        ROLE_ADMIN: [ROLE_MODERATEUR, ROLE_EDITION_DE_LIVRE]
+```
+
+```php
+<?php
+if ($this->isGranted(‘ROLE_AJOUT_DE_LIVRE’) {
+//…
+}
+```
+
+Les utilisateurs qui ont le rôle ROLE_ADMIN pourront passer, même si on ne leur a pas explicitement ajouté le rôle ROLE_AJOUT_DE_LIVRE.
+
+
+# Les Voters personnalisés.
+
+```php
+Implémenter l’interface Symfony\Component\Security\Core\Authorization\Voter\VoterInterface .
+
+Ou, étendre la classe abstraite Symfony\Component\Security\Core\Authorization\Voter\Voter qui implémente déjà l’interface et nous offre deux méthodes à implémenter obligatoirement :
+
+supports(string $attribute, mixed $subject): bool . Elle reçoit l’attribut qui a été passé en premier argument à isGranted ainsi qu’un éventuel second argument, et renvoie true si le Voter peut prendre une décision, false s'il s'abstient.
+
+voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool)  . Elle reçoit aussi l’attribut, le sujet éventuel, et l’objet  TokenInterface contenant notre utilisateur. Elle renvoie ensuite true pour autoriser l’accès, false pour le refuser.
+```
+
+OrganiseR le code en mettant les classes dans des dossiers sémantiques (des dossiers dont le nom évoque la fonction des classes qu'ils contiennent).
+
+Vérifier systématiquement que l'utilisateur qu'on récupère n'est pas null.
+
+# Restreindre les schémas de route grâce à la configuration.
+
+Mécanisme permettant de restreindre un grand nombre de routes très facilement et rapidement.
+
+```yaml
+config/packages/security.yaml  et regardez en bas du fichier, en dessous des firewalls :
+
+security:
+# …
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+    # - { path: ^/admin, roles: ROLE_ADMIN }
+    # - { path: ^/profile, roles: ROLE_USER }
+```
+Pour pouvoir accéder à toutes les routes qui commencent par /admin, il faudra être un utilisateur qui possède le rôle ROLE_ADMIN.
+
+Les règles n’ont pas forcément à se baser sur des chemins uniquement. De nombreuses autres options sont disponibles, comme les restrictions par adresse ip, par host, et bien d’autres encore.
+
+# En résumé.
+- Demander des contrôles d’accès grâce aux nombreuses versions de la méthode isGranted.
+- Ensuite, Symfony appelle des Voters, qui peuvent s’abstenir, accorder l'accès ou le refuser.
+- Le comportement par défaut vérifie des rôles. (?)
+- On peut faire ses propres Voters pour implémenter des restrictions spécifiques.
+- La section access_control du fichier security.yaml permet de restreindre des sections entières de l'application.
+
 
