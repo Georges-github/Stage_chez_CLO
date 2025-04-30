@@ -630,7 +630,7 @@ framework:
 
 - Il y a des FormTypes qui ne sont pas basés sur des entités.
 
-- Dans un FormType basé sur une entité, il peut y avoir des champs qui ne correspondent pas aux propriétés de votre entité; iil faut l'indiquer à Symfony. Dans le tableau d'options à passer en troisième paramètre à la fonction $builder->add(), ajouter une option 'mapped' => false. Y ajouter ensuite des contraintes de validation, directement dans le FormType, grâce à l'option 'constraints' => []  qui prend comme valeur un tableau des contraintes, instanciées avec le mot-clé new .
+- Dans un FormType basé sur une entité, il peut y avoir des champs qui ne correspondent pas aux propriétés de votre entité; il faut l'indiquer à Symfony. Dans le tableau d'options à passer en troisième paramètre à la fonction $builder->add(), ajouter une option 'mapped' => false. Y ajouter ensuite des contraintes de validation, directement dans le FormType, grâce à l'option 'constraints' => []  qui prend comme valeur un tableau des contraintes, instanciées avec le mot-clé new .
 
 ```php
 <?php
@@ -1067,8 +1067,8 @@ Dans le fichier "src/Form/RegistrationFormType.php" qui a été généré, suppr
 plainPassword n'est pas mappé.
 
 ```php
-$pwd = $form->get('plainPassword')->getData()
-UserPasswordHasherInterface $userPasswordHasher->hashPassword( $utilisateur , $pswd );
+$pwd = $form->get('plainPassword')->getData();
+UserPasswordHasherInterface $userPasswordHasher->hashPassword( $user , $pwd );
 $user->setPassword();
 ```
 
