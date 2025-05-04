@@ -110,7 +110,7 @@ public function findContratsDesClients(): array
 
 ## ✅ Résultat attendu
 
-Tu peux maintenant :
+On peux maintenant :
 - Contrôler l’accès à une page avec un rôle dynamique (regex sur rôle),
 - Récupérer uniquement les contrats des clients,
 - Déboguer proprement dans Twig.
