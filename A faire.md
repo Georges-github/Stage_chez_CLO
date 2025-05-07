@@ -80,4 +80,22 @@ Ajuster la taille des menus déroulants (genres).
 Faire un bouton 'logout'.
 
 
+Remplacer le 'Mettre à jour' des boutons des formulaires d'ajout.
+
+
+Mettre les titres des pages.
+
+
+Dans les WireFrames, le champ fichier de contrat ne sera probablement pas aussi large.
+
+
+Générer le MPD (via phpmysql).
+
+
+Dans le MLD, dans Contrat, le 'numéro de contrat' n'est pas indiqué comme PK.
+
+
+
+
+
 ```
