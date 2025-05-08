@@ -533,3 +533,218 @@ $filename = $fileUploader->upload(
 ---
 
 Souhaitez-vous aussi un **command Symfony** pour nettoyer automatiquement les miniatures orphelines, ou un **service Twig** pour générer les URLs de miniature automatiquement ?
+
+
+# ###################################################################
+# -------------------------------------------------------------------
+# ###################################################################
+
+
+Excellent choix ✅ — stocker les fichiers **en dehors de `public/`** est **nettement plus sécurisé**, surtout si ces fichiers contiennent des données personnelles, des PDF confidentiels, ou tout ce qui ne doit pas être accessible librement via URL.
+
+---
+
+### 🛡️ Raisons de stocker hors de `public/` :
+
+* Empêche un accès direct aux fichiers par URL (`https://example.com/uploads/...`)
+* Permet de mieux **contrôler l’accès** aux documents via Symfony (ex : vérification d'identité avant envoi)
+* Donne plus de liberté pour organiser, déplacer ou supprimer des fichiers sans exposer leur structure au navigateur
+
+---
+
+### ✅ Nouvelle version de la méthode `upload()` (hors `public/`)
+
+Voici une version adaptée :
+
+```php
+public function upload(
+    UploadedFile $file,
+    int|string $userId,
+    string $category = 'documents',
+    ?string $oldFilename = null,
+    bool $generateThumbnail = false,
+    ?array $thumbnailSize = null
+): string {
+    $this->validate($file);
+
+    $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+    $safeFilename = $this->slugger->slug($originalFilename);
+    $extension = strtolower($file->guessExtension() ?? 'bin');
+    $newFilename = $safeFilename . '-' . uniqid() . '.' . $extension;
+
+    // Ex : 'users/42/documents'
+    $relativePath = 'users/' . $userId . '/' . $category;
+
+    // Dossier absolu en dehors de public/
+    $destination = $this->getSecureStorageDirectory($relativePath);
+
+    if (!is_dir($destination)) {
+        if (!mkdir($destination, 0775, true) && !is_dir($destination)) {
+            throw new \RuntimeException("Impossible de créer le répertoire : $destination");
+        }
+    }
+
+    try {
+        $file->move($destination, $newFilename);
+
+        if ($oldFilename) {
+            $this->delete($relativePath . '/' . $oldFilename);
+        }
+
+        if ($generateThumbnail && in_array($extension, ['jpg', 'jpeg', 'png'])) {
+            [$thumbWidth, $thumbHeight] = $thumbnailSize ?? [200, 200];
+            $this->generateThumbnail(
+                $destination . '/' . $newFilename,
+                $destination . '/thumb_' . $newFilename,
+                $thumbWidth,
+                $thumbHeight
+            );
+        }
+
+    } catch (FileException $e) {
+        throw new \RuntimeException('Échec de l’envoi du fichier : ' . $e->getMessage());
+    }
+
+    // Retourne le chemin RELATIF (pour stockage en base par exemple)
+    return $relativePath . '/' . $newFilename;
+}
+```
+
+---
+
+### 🔧 `getSecureStorageDirectory()`
+
+Défini comme :
+
+```php
+public function getSecureStorageDirectory(string $subdirectory = ''): string
+{
+    return $this->privateStorageDir . ($subdirectory ? '/' . trim($subdirectory, '/') : '');
+}
+```
+
+Où `$this->privateStorageDir` pourrait être par exemple :
+
+```php
+$this->privateStorageDir = $projectDir . '/var/storage';
+```
+
+(NB : `$projectDir` est injecté par Symfony via `%kernel.project_dir%`)
+
+---
+
+### 📦 Pour servir les fichiers : utiliser une action Symfony
+
+Exemple de contrôleur pour envoyer un fichier **de manière sécurisée** :
+
+```php
+#[Route('/download/{userId}/{category}/{filename}', name: 'secure_file_download')]
+public function downloadFile(string $userId, string $category, string $filename): Response
+{
+    $this->denyAccessUnlessGranted('DOWNLOAD', $userId); // Ajoute ton contrôle ici
+
+    $filePath = $this->storageService->getSecureStorageDirectory("users/$userId/$category") . '/' . $filename;
+
+    if (!file_exists($filePath)) {
+        throw $this->createNotFoundException();
+    }
+
+    return $this->file($filePath);
+}
+```
+
+---
+
+Souhaitez-vous que je vous fournisse un service complet `SecureStorageService` avec injection des chemins et méthodes pour la lecture, suppression, et téléchargement ?
+
+
+# ###################################################################
+# -------------------------------------------------------------------
+# ###################################################################
+
+
+Absolument, et vous faites bien de demander !
+
+---
+
+### 🧠 Ce que cela signifie
+
+Dans Symfony, vous avez accès à certaines **variables spéciales** que Symfony injecte dans vos services ou vos classes — l’une d’elles est :
+
+> 🔹 **`%kernel.project_dir%`** : c’est le chemin **absolu vers la racine de votre projet Symfony**.
+
+Par exemple, si votre projet est situé dans :
+
+```
+/home/votre-nom/mes-projets/mon-site-symfony/
+```
+
+alors :
+
+```yaml
+%kernel.project_dir% = /home/votre-nom/mes-projets/mon-site-symfony
+```
+
+---
+
+### 📂 Pourquoi `var/storage` ?
+
+C’est un bon emplacement **hors de `public/`** pour stocker les fichiers **privés** (non accessibles directement depuis le navigateur).
+Dans Symfony, on utilise souvent le répertoire `var/` pour :
+
+* les logs,
+* les caches,
+* les fichiers temporaires,
+* les fichiers persistants internes (comme ici).
+
+Donc, si vous combinez :
+
+```php
+$projectDir . '/var/storage'
+```
+
+Vous obtenez un dossier comme :
+
+```
+/home/votre-nom/mes-projets/mon-site-symfony/var/storage
+```
+
+---
+
+### ✅ Comment faire concrètement ?
+
+Dans votre **service d'upload**, injectez le chemin depuis les paramètres Symfony :
+
+```yaml
+# config/services.yaml
+parameters:
+    app.private_upload_dir: '%kernel.project_dir%/var/storage'
+```
+
+Et dans votre service PHP :
+
+```php
+private string $privateStorageDir;
+
+public function __construct(string $privateUploadDir)
+{
+    $this->privateStorageDir = $privateUploadDir;
+}
+```
+
+Puis configurez l’injection dans `services.yaml` :
+
+```yaml
+services:
+    App\Service\YourUploadService:
+        arguments:
+            $privateUploadDir: '%app.private_upload_dir%'
+```
+
+---
+
+### 🎯 Résultat
+
+Votre service connaît désormais le chemin absolu vers un dossier **non public**, sécurisé, et structuré proprement dans `var/storage`.
+
+Souhaitez-vous que je vous donne un `SecureStorageService` complet basé sur ce principe ?

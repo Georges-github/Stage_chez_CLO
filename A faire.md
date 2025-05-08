@@ -95,7 +95,7 @@ Générer le MPD (via phpmysql).
 Dans le MLD, dans Contrat, le 'numéro de contrat' n'est pas indiqué comme PK.
 
 
-
+FileUploader : Unable to guess the MIME type as no guessers are available (have you enabled the php_fileinfo extension?).
 
 
 ```
