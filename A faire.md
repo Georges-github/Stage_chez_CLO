@@ -98,4 +98,23 @@ Dans le MLD, dans Contrat, le 'numéro de contrat' n'est pas indiqué comme PK.
 FileUploader : Unable to guess the MIME type as no guessers are available (have you enabled the php_fileinfo extension?).
 
 
+Dans la vue 'voir un contrat' ajouter le No de tel mobile du client.
+
+
+Pour les dates en français dans twig :
+composer require twig/intl-extra
+et dans twig.yaml :
+extra:
+        twig/intl-extra: true
+
+
+Mettre dans la documentation les fichiers de configuration de Symfony (.yaml, ...) .
+
+
+Dans 'php.ini' décommenter : ;extension=intl .
+
+
+Retirer les commentaires inutiles et ceux de chatGPT.
+
+
 ```
