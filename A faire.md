@@ -117,4 +117,12 @@ Dans 'php.ini' décommenter : ;extension=intl .
 Retirer les commentaires inutiles et ceux de chatGPT.
 
 
+Lorsqu'un contrat est édité et le fichier contrat remplacé par un autre, penser à supprimer l'ancien.
+
+
+Dans la ligne suivante de ContratController.php :
+        return $this->render( 'FrontEnd/EditerUnContrat.html.twig' , [ 'form' => $form, 'edition' => false , 'pathContratActuel' => $pathContratActuel ] );
+le champ 'edition' est certainement inutile.
+
+
 ```
