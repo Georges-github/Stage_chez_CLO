@@ -125,4 +125,15 @@ Dans la ligne suivante de ContratController.php :
 le champ 'edition' est certainement inutile.
 
 
+Dans  $contrat->setDateHeureMAJ( new \DateTimeImmutable( 'now', new \DateTimeZone('Europe/Paris') ) ); l'heure n'est pas l'heure "actuelle".
+
+
+Ajouter la colonne numéroContrat dans les wireframes de listeDesContrats .
+
+
+Si possible faire un outil PERL pour aèrer le code php.
+
+
+
+
 ```
