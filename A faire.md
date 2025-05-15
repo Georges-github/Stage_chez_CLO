@@ -24,6 +24,8 @@ Passer en revue les 'GET' et 'POST'.
 
 
 Vérifier les titres des pages.
+Notamment dans les cas où il y a :
+{% block title %}{% if edition == true %}Editer{% else %}Ajouter{% endif %} un client{% endblock %}
 
 
 Vérifier la navigation, en particulier les retours.
@@ -133,6 +135,17 @@ Ajouter la colonne numéroContrat dans les wireframes de listeDesContrats .
 
 Si possible faire un outil PERL pour aèrer le code php.
 
+
+Maintenant que PileDePDFDansPublic est implémenté supprimer les occurrences du paramètre 'pathContratDansPublic'.
+
+
+Ne pas oublier d'enlever les traces d'affichage de la pile_de_pdf_dans_public.
+
+
+Juste pour ne pas oublier cette éventualité : navigator.sendBeacon("/log", donneesAnalytiques);
+
+
+Ne pas oublier d'appeler forget() du service ContratActif.
 
 
 
