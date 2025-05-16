@@ -148,5 +148,8 @@ Juste pour ne pas oublier cette éventualité : navigator.sendBeacon("/log", don
 Ne pas oublier d'appeler forget() du service ContratActif.
 
 
+Enlever le 'pipo' dans les appels à $fileUploader->upload() .
+
+
 
 ```
