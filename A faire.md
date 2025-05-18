@@ -151,5 +151,7 @@ Ne pas oublier d'appeler forget() du service ContratActif.
 Enlever le 'pipo' dans les appels à $fileUploader->upload() .
 
 
+Retirer les fichiers générés par CRUD.
+
 
 ```
