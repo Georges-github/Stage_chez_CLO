@@ -154,4 +154,19 @@ Enlever le 'pipo' dans les appels à $fileUploader->upload() .
 Retirer les fichiers générés par CRUD.
 
 
+Fusionner ImageController et PhotoController.
+
+
+Ajouter des token CSRF "partout".
+
+
+Ne pas oublier que chaque Commentaire a un auteur.
+
+
+Dans Photo le champ idPublication a été rendu nullable.
+
+
+Il faut décider où seront mis les fichiers de photo, dans quel répertoire : faut-il tenir compte de l'utilisateur ? du contrat ?
+
+
 ```
