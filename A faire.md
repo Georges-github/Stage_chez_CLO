@@ -169,4 +169,7 @@ Dans Photo le champ idPublication a été rendu nullable.
 Il faut décider où seront mis les fichiers de photo, dans quel répertoire : faut-il tenir compte de l'utilisateur ? du contrat ?
 
 
+Ne pas oublier les {{ form_errors(form.genre) }}
+
+
 ```
