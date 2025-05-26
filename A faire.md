@@ -136,7 +136,7 @@ Ajouter la colonne numéroContrat dans les wireframes de listeDesContrats .
 Si possible faire un outil PERL pour aèrer le code php.
 
 
-Maintenant que PileDePDFDansPublic est implémenté supprimer les occurrences du paramètre 'pathContratDansPublic'.
+Fait le 26 mai 2025 : Maintenant que PileDePDFDansPublic est implémenté supprimer les occurrences du paramètre 'pathContratDansPublic'.
 
 
 Ne pas oublier d'enlever les traces d'affichage de la pile_de_pdf_dans_public.
@@ -170,6 +170,12 @@ Il faut décider où seront mis les fichiers de photo, dans quel répertoire : f
 
 
 Ne pas oublier les {{ form_errors(form.genre) }}
+
+
+Adapter Figma de 'Editer un contrat' et 'Ajouter un contrat'.
+
+
+
 
 
 ```
