@@ -175,6 +175,9 @@ Ne pas oublier les {{ form_errors(form.genre) }}
 Adapter Figma de 'Editer un contrat' et 'Ajouter un contrat'.
 
 
+Faire le dictionnaire de données.
+
+
 
 
 
