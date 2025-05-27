@@ -178,7 +178,7 @@ Adapter Figma de 'Editer un contrat' et 'Ajouter un contrat'.
 Faire le dictionnaire de données.
 
 
-
+Dans le pdf généré chaque commentaire est identifié par la valeur de son id : '#14' par exemple.
 
 
 ```
