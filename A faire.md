@@ -8,10 +8,10 @@ et dans
 Validations::validerMotDePasse() { ... }
 
 
-Responsive de : éditer un employé ET ajouter un employé.
+Fait : Responsive de : éditer un employé ET ajouter un employé.
 
 
-Supprimer les 'use' inutiles. Ordonner ceux qui resteront.
+Supprimer les 'use' inutiles. Ordonner ceux qui resteront. Commencé et à poursuivre à partir du répertoire 'src/FrontEnd'.
 
 
 Ajouter les messages 'flash'.
@@ -23,7 +23,7 @@ Eventuellement : inverser la valeur l'option 'edition' dans 'EditerUnEmployeType
 Passer en revue les 'GET' et 'POST'.
 
 
-Vérifier les titres des pages.
+Fait le 28 mai 2025 : Vérifier les titres des pages.
 Notamment dans les cas où il y a :
 {% block title %}{% if edition == true %}Editer{% else %}Ajouter{% endif %} un client{% endblock %}
 
@@ -182,6 +182,10 @@ Dans le pdf généré chaque commentaire est identifié par la valeur de son id 
 
 
 Appli 'dev' et appli 'env'.
+
+
+Supprimer Tracer dans les signatures de méthodes.
+
 
 
 ```
