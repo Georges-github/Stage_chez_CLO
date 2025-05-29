@@ -9,7 +9,7 @@ php composer-setup.php
 php -r "unlink('composer-setup.php');"
 
 # Nouveau projet :
-symfony new <nom_du_dossier>
+symfony new <nom_du_dossier> --webapp
 
 # Arborescence projet :
 biblios/
