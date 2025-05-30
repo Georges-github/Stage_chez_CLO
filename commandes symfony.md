@@ -25,7 +25,8 @@ symfony console doctrine:fixtures:load
 
 symfony console make:security:form-login
 
-
+Symfony s’appuie sur l’autoloading PSR-4 géré par Composer. Parfois, si tu as déplacé ou renommé un fichier sans relancer l'autoloader, Symfony ne le trouve plus. Exécute :
+composer dump-autoload
 
 
 

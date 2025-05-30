@@ -187,5 +187,7 @@ Appli 'dev' et appli 'env'.
 Supprimer Tracer dans les signatures de méthodes.
 
 
+Supprimer le bord bleu fin dans le tableau des listes.
+
 
 ```
