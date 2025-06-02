@@ -178,7 +178,7 @@ Adapter Figma de 'Editer un contrat' et 'Ajouter un contrat'.
 Faire le dictionnaire de données.
 
 
-Dans le pdf généré chaque commentaire est identifié par la valeur de son id : '#14' par exemple.
+FAIT Dans le pdf généré chaque commentaire est identifié par la valeur de son id : '#14' par exemple.
 
 
 Appli 'dev' et appli 'env'.
@@ -188,6 +188,21 @@ Supprimer Tracer dans les signatures de méthodes.
 
 
 Supprimer le bord bleu fin dans le tableau des listes.
+
+
+FAIT le 2 juin 2025 Pourquoi suppression FAC dans voirUnContrat ?
+
+
+FAIT le 2 juin 2025 Lorsque "Fixe :", etc. est vide, ne pas l'afficher.
+
+
+Fixtures : Les états successifs sont tous effectués par le même client.
+
+
+Ajouter du JS et savoir expliquer le fetch dans 'supprimer photo'.
+
+
+Maildev.
 
 
 ```
