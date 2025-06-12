@@ -1,0 +1,2143 @@
+Delivered-To: elias.mainokaid@gmail.com
+Received: by 2002:a05:7412:4481:b0:139:53eb:9e48 with SMTP id x1csp10370929rde;
+        Fri, 3 Jan 2025 07:15:44 -0800 (PST)
+X-Forwarded-Encrypted: i=2; AJvYcCUcgtKCRmmvkCdCiBVMIeol4wV3Q+xciB6UlpNmDasMzUObQNRWDimB4O/EDdVgM7kusFHx3ss17JWcm/qDyAk=@gmail.com
+X-Google-Smtp-Source: AGHT+IEpwafkc7BswuPK1gXVcJgQoskcGtMD/ACdhX0jrmaXUijwNnWDe/d2h547sRGkTBjbyzDt
+X-Received: by 2002:a05:600c:3b18:b0:434:a26c:8291 with SMTP id 5b1f17b1804b1-43668a3a329mr391730705e9.24.1735917344027;
+        Fri, 03 Jan 2025 07:15:44 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1735917344; cv=none;
+        d=google.com; s=arc-20240605;
+        b=iqFwr4jvIXsM4XIspyMCfP6tJc2Mp3So5ddrQj3VXS7utm+Y+rJ2CvTxfq6I7Cz4M0
+         bisQ/uuBh/cdcGSMXW9feByfhVc5bfuf9CDIA26XKwHsQflCOxXHEmZS4iYIa+l+6RJn
+         aLPSJuUVjtZtyEf0jYtQ00LxNnrOpZoQ4NxOIbeTlZnMBuN1dChw6N5zClsArnAeWScU
+         PhBNhuyHVh6dEPFDA7Nt/fE9Jx73JX7cV35HondwByyk/Q9kc6gLnMXcS4NiqDPzNnYr
+         pFkebxJnYwI9o7Qv4oF/2RPxEScdL8DYqhmxM/q0kuGFdjkjARgoZ8ospZ0NgEs42YXc
+         u/+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-language:thread-index:mime-version:message-id:date:subject
+         :to:from:domainkey-signature:dkim-signature;
+        bh=35N7ciAoAjX4t2tAoAEaBIoUPz0OTp9ZZ2bCrCk2vbk=;
+        fh=2QbXL/jw/Xj2LbSrKqMzCkpD6oei2u1U0+jF+P94aoc=;
+        b=JcMG8yQrw3wL8Urbt79MpKCBfExwzQVI6BMmcoHYSVLytbI53RqoW+3WyzQQHTVlJb
+         QGAF+U7YzRTWuCPc1kiOpfupH+1PIq5pcL1badTTl9C4vW1aOcb+Hnfj0GbJ1Q/HYFv3
+         VGkuPkfyQIrmjSzn+1C0XML5rm7fValzbW51oWwVRUsv2MiyREsMEgrYAQKe4q0QBBnJ
+         QDH4FkCkQbIJ+pI1ZAjGhx97195npmsycYYX+IHzjPDjlc4E5BEsHUkjUwubt7gBuRNY
+         SrA3qQmoPwoPN/c29hjQu4a3uESj8hKvSB6TBKwUeCKOT4Jw05Oh503s3VBxm75qEjQD
+         B7oA==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@ac-versailles.fr header.s=first header.b=XEkLvsGw;
+       spf=pass (google.com: domain of berengere.poindron@ac-versailles.fr designates 195.83.95.170 as permitted sender) smtp.mailfrom=berengere.poindron@ac-versailles.fr;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=ac-versailles.fr
+Return-Path: <berengere.poindron@ac-versailles.fr>
+Received: from smtpout4.ac-versailles.fr (smtpout4.ac-versailles.fr. [195.83.95.170])
+        by mx.google.com with ESMTP id ffacd0b85a97d-38a1c8ca432si20955915f8f.611.2025.01.03.07.15.43;
+        Fri, 03 Jan 2025 07:15:43 -0800 (PST)
+Received-SPF: pass (google.com: domain of berengere.poindron@ac-versailles.fr designates 195.83.95.170 as permitted sender) client-ip=195.83.95.170;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@ac-versailles.fr header.s=first header.b=XEkLvsGw;
+       spf=pass (google.com: domain of berengere.poindron@ac-versailles.fr designates 195.83.95.170 as permitted sender) smtp.mailfrom=berengere.poindron@ac-versailles.fr;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=ac-versailles.fr
+Received: from localhost (localhost [127.0.0.1])
+	by smtpout4.ac-versailles.fr (Postfix) with ESMTP id 81E31541C9E;
+	Fri,  3 Jan 2025 16:15:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=ac-versailles.fr; h=from
+	:to:subject:date:message-id:mime-version:content-type; s=first;
+	 bh=GonFcw76yDJ14H/8CZBixY0OuwY=; b=XEkLvsGwR/Go08ja6GaZ+q4G17l9
+	ZRdTMZTv+fLnD4g17Rhp9RLNM26z7MB+xVKrwdOblcO5mLPFyB+Axay/B6cs8MAa
+	qG19aF4bu/KTuV9gdUgHZUV5+vtYfJq3IgRYCOvZpL28ExuZUbFHwztdGoTxIRAF
+	EWS6yiHUBF63YHA=
+DomainKey-Signature: a=rsa-sha1; c=nofws; d=ac-versailles.fr; h=from:to
+	:subject:date:message-id:mime-version:content-type; q=dns; s=
+	first; b=armCZUyUQ2+eiFJ/eRizJv+7DzHJwso3j0IfgH14iVodvo9lGDCykH1
+	KbseGese7jKlZ8heg78NsPiHTPJLLwlGrjkCWwGqt/a+2sav9nFkA+zO5yZfbLrO
+	O8P4up/VebgeOjyyR/tinBnw4Lo8p0oPO2x8vMUZ14mr2+mzTQzI=
+X-Virus-Scanned: Debian amavisd-new at smtpout4.in.ac-versailles.fr
+Received: from smtpout4.ac-versailles.fr ([127.0.0.1])
+	by localhost (smtpout4.in.ac-versailles.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6SX3nac99KKf; Fri,  3 Jan 2025 16:15:43 +0100 (CET)
+Received: from Bpoindron (91-167-233-241.subs.proxad.net [91.167.233.241])
+	by smtpout4.ac-versailles.fr (Postfix) with ESMTPA id 3A95B54090B;
+	Fri,  3 Jan 2025 16:15:42 +0100 (CET)
+From: <berengere.poindron@ac-versailles.fr>
+To: <berengere.poindron@ac-versailles.fr>
+Subject: Emploi du temps janvier 2025
+Date: Fri, 3 Jan 2025 16:16:04 +0100
+Message-ID: <005801db5df2$68493aa0$38dbafe0$@ac-versailles.fr>
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+	boundary="----=_NextPart_000_0059_01DB5DFA.CA17B4C0"
+X-Mailer: Microsoft Outlook 16.0
+Thread-index: Adtd8hcOwi9y6mxBSeKGAVb80B1wYg==
+Content-language: fr
+
+This is a multipart message in MIME format.
+
+------=_NextPart_000_0059_01DB5DFA.CA17B4C0
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+Chers stagiaires,
+
+=20
+
+Voici votre emploi du temps de mois de janvier 2025. Je vous ferai
+=E9videmment part d=92=E9ventuelles modifications !
+
+Je vous en souhaite bonne r=E9ception et vous souhaite un bon weekend !
+
+=20
+
+B=E9reng=E8re
+
+=20
+
+=20
+
+
+LUNDI
+
+6-janv.
+
+MODULE 4
+
+Pr=E9sentiel
+
+DELORME Christian
+
+
+=20
+
+6-janv.
+
+MODULE 4
+
+Pr=E9sentiel
+
+DELORME Christian
+
+
+MARDI
+
+7-janv.
+
+MODULE 4
+
+Pr=E9sentiel
+
+DELORME Christian
+
+
+=20
+
+7-janv.
+
+MODULE 4
+
+Pr=E9sentiel
+
+DELORME Christian
+
+
+MERCREDI
+
+8-janv.
+
+OpenClassrooms
+
+Autonomie
+
+=20
+
+
+=20
+
+8-janv.
+
+OpenClassrooms
+
+Autonomie
+
+=20
+
+
+JEUDI
+
+9-janv.
+
+MODULE 4
+
+Pr=E9sentiel
+
+DELORME Christian
+
+
+=20
+
+9-janv.
+
+MODULE 4
+
+Pr=E9sentiel
+
+DELORME Christian
+
+
+VENDREDI
+
+10-janv.
+
+MODULE 4
+
+Pr=E9sentiel
+
+DELORME Christian
+
+
+=20
+
+10-janv.
+
+MODULE 4
+
+Pr=E9sentiel
+
+DELORME Christian
+
+
+=20
+
+11-janv.
+
+=20
+
+=20
+
+=20
+
+
+=20
+
+=20
+
+=20
+
+=20
+
+=20
+
+
+=20
+
+12-janv.
+
+=20
+
+=20
+
+=20
+
+
+=20
+
+=20
+
+=20
+
+=20
+
+=20
+
+
+LUNDI
+
+13-janv.
+
+MODULE 5
+
+Pr=E9sentiel
+
+HARRIZ Malik
+
+
+=20
+
+13-janv.
+
+MODULE 5
+
+Pr=E9sentiel
+
+HARRIZ Malik
+
+
+MARDI
+
+14-janv.
+
+MODULE 5
+
+Pr=E9sentiel
+
+HARRIZ Malik
+
+
+=20
+
+14-janv.
+
+MODULE 5
+
+Pr=E9sentiel
+
+HARRIZ Malik
+
+
+MERCREDI
+
+15-janv.
+
+OpenClassrooms
+
+Autonomie
+
+=20
+
+
+=20
+
+15-janv.
+
+OpenClassrooms
+
+Autonomie
+
+=20
+
+
+JEUDI
+
+16-janv.
+
+MODULE 5
+
+Pr=E9sentiel
+
+HARRIZ Malik
+
+
+=20
+
+16-janv.
+
+MODULE 5
+
+Pr=E9sentiel
+
+HARRIZ Malik
+
+
+VENDREDI
+
+17-janv.
+
+MODULE 5
+
+Pr=E9sentiel
+
+HARRIZ Malik
+
+
+=20
+
+17-janv.
+
+MODULE 5
+
+Pr=E9sentiel
+
+HARRIZ Malik
+
+
+=20
+
+18-janv.
+
+=20
+
+=20
+
+=20
+
+
+=20
+
+=20
+
+=20
+
+=20
+
+=20
+
+
+=20
+
+19-janv.
+
+=20
+
+=20
+
+=20
+
+
+=20
+
+=20
+
+=20
+
+=20
+
+=20
+
+
+LUNDI
+
+20-janv.
+
+MODULE 5
+
+Pr=E9sentiel
+
+HARRIZ Malik
+
+
+=20
+
+20-janv.
+
+MODULE 5
+
+Pr=E9sentiel
+
+HARRIZ Malik
+
+
+MARDI
+
+21-janv.
+
+Accompagnement emploi
+
+Pr=E9sentiel
+
+COURTINAT B=E9n=E9dicte
+
+
+=20
+
+21-janv.
+
+Accompagnement emploi
+
+Pr=E9sentiel
+
+COURTINAT B=E9n=E9dicte
+
+
+MERCREDI
+
+22-janv.
+
+MODULE 5
+
+Classe virtuelle
+
+HARRIZ Malik
+
+
+=20
+
+22-janv.
+
+MODULE 5
+
+Classe virtuelle
+
+HARRIZ Malik
+
+
+JEUDI
+
+23-janv.
+
+MODULE 5
+
+Pr=E9sentiel
+
+DELORME Christian
+
+
+=20
+
+23-janv.
+
+MODULE 4
+
+Pr=E9sentiel
+
+DELORME Christian
+
+
+VENDREDI
+
+24-janv.
+
+MODULE 4
+
+Pr=E9sentiel
+
+DELORME Christian
+
+
+=20
+
+24-janv.
+
+MODULE 4
+
+Pr=E9sentiel
+
+DELORME Christian
+
+
+=20
+
+25-janv.
+
+=20
+
+=20
+
+=20
+
+
+=20
+
+=20
+
+=20
+
+=20
+
+=20
+
+
+=20
+
+26-janv.
+
+=20
+
+=20
+
+=20
+
+
+=20
+
+=20
+
+=20
+
+=20
+
+=20
+
+
+LUNDI
+
+27-janv.
+
+MODULE 6
+
+Pr=E9sentiel
+
+HARRIZ Malik
+
+
+=20
+
+27-janv.
+
+MODULE 6
+
+Pr=E9sentiel
+
+HARRIZ Malik
+
+
+MARDI
+
+28-janv.
+
+MODULE 6
+
+Pr=E9sentiel
+
+HARRIZ Malik
+
+
+=20
+
+28-janv.
+
+MODULE 6
+
+Pr=E9sentiel
+
+HARRIZ Malik
+
+
+MERCREDI
+
+29-janv.
+
+Anglais
+
+Classe virtuelle
+
+SUAREZ Elisabeth
+
+
+=20
+
+29-janv.
+
+MODULE 6
+
+Classe virtuelle
+
+HARRIZ Malik
+
+
+JEUDI
+
+30-janv.
+
+MODULE 6
+
+Pr=E9sentiel
+
+HARRIZ Malik
+
+
+=20
+
+30-janv.
+
+MODULE 6
+
+Pr=E9sentiel
+
+HARRIZ Malik
+
+
+VENDREDI
+
+31-janv.
+
+MODULE 6
+
+Pr=E9sentiel
+
+HARRIZ Malik
+
+
+=20
+
+31-janv.
+
+MODULE 6
+
+Pr=E9sentiel
+
+HARRIZ Malik
+
+=20
+
+
+------=_NextPart_000_0059_01DB5DFA.CA17B4C0
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" =
+xmlns:o=3D"urn:schemas-microsoft-com:office:office" =
+xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:x=3D"urn:schemas-microsoft-com:office:excel" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" =
+xmlns=3D"http://www.w3.org/TR/REC-html40"><head><meta =
+http-equiv=3DContent-Type content=3D"text/html; =
+charset=3Diso-8859-1"><meta name=3DGenerator content=3D"Microsoft Word =
+15 (filtered medium)"><style><!--
+/* Font Definitions */
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Sans;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;
+	mso-fareast-language:EN-US;}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:#0563C1;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{mso-style-priority:99;
+	color:#954F72;
+	text-decoration:underline;}
+span.EmailStyle17
+	{mso-style-type:personal-compose;
+	font-family:"Calibri",sans-serif;
+	color:windowtext;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-family:"Calibri",sans-serif;
+	mso-fareast-language:EN-US;}
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:70.85pt 70.85pt 70.85pt 70.85pt;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]--></head><body lang=3DFR =
+link=3D"#0563C1" vlink=3D"#954F72"><div class=3DWordSection1><p =
+class=3DMsoNormal>Chers stagiaires,<o:p></o:p></p><p =
+class=3DMsoNormal><o:p>&nbsp;</o:p></p><p class=3DMsoNormal>Voici votre =
+emploi du temps de mois de janvier 2025. Je vous ferai =E9videmment part =
+d&#8217;=E9ventuelles modifications&nbsp;!<o:p></o:p></p><p =
+class=3DMsoNormal>Je vous en souhaite bonne r=E9ception et vous souhaite =
+un bon weekend&nbsp;!<o:p></o:p></p><p =
+class=3DMsoNormal><o:p>&nbsp;</o:p></p><p =
+class=3DMsoNormal>B=E9reng=E8re<o:p></o:p></p><p =
+class=3DMsoNormal><o:p>&nbsp;</o:p></p><p =
+class=3DMsoNormal><o:p>&nbsp;</o:p></p><table class=3DMsoNormalTable =
+border=3D0 cellspacing=3D0 cellpadding=3D0 width=3D637 =
+style=3D'width:478.0pt;border-collapse:collapse'><tr =
+style=3D'height:14.4pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;padding:0cm 3.5pt 0cm 3.5pt;height:14.4pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:Sans;color:black;mso-fareast-langua=
+ge:FR'>LUNDI<o:p></o:p></span></b></p></td><td width=3D83 nowrap =
+style=3D'width:62.0pt;border:solid windowtext 1.0pt;padding:0cm 3.5pt =
+0cm 3.5pt;height:14.4pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>6-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+4<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border:solid windowtext =
+1.0pt;border-left:none;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border:solid windowtext =
+1.0pt;border-left:none;padding:0cm 3.5pt 0cm 3.5pt;height:14.4pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>DELORME =
+Christian<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.0pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>6-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+4<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 3.5pt =
+0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>DELORME =
+Christian<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.75pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:Sans;color:black;mso-fareast-langua=
+ge:FR'>MARDI<o:p></o:p></span></b></p></td><td width=3D83 nowrap =
+style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>7-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+4<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>DELORME =
+Christian<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.0pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>7-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+4<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 3.5pt =
+0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>DELORME =
+Christian<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.75pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:Sans;color:black;mso-fareast-langua=
+ge:FR'>MERCREDI<o:p></o:p></span></b></p></td><td width=3D83 nowrap =
+style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>8-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>OpenClassrooms<o:p></o:p></=
+span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 3.5pt =
+0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Autonomie<o:p></o:p></span>=
+</b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>&nbsp;<o:p></o:p></span></b=
+></p></td></tr><tr style=3D'height:15.0pt'><td width=3D83 nowrap =
+valign=3Dbottom style=3D'width:62.0pt;background:white;padding:0cm 3.5pt =
+0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>8-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>OpenClassrooms<o:p></o:p></=
+span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Autonomie<o:p></o:p></span>=
+</b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>&nbsp;<o:p></o:p></span></b=
+></p></td></tr><tr style=3D'height:15.75pt'><td width=3D83 nowrap =
+valign=3Dbottom style=3D'width:62.0pt;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:Sans;color:black;mso-fareast-langua=
+ge:FR'>JEUDI<o:p></o:p></span></b></p></td><td width=3D83 nowrap =
+style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>9-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+4<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>DELORME =
+Christian<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.0pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>9-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+4<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 3.5pt =
+0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>DELORME =
+Christian<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.75pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:Sans;color:black;mso-fareast-langua=
+ge:FR'>VENDREDI<o:p></o:p></span></b></p></td><td width=3D83 nowrap =
+style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.75pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>10-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+4<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>DELORME =
+Christian<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.0pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>10-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+4<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 3.5pt =
+0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>DELORME =
+Christian<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.75pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border-top:none;border-left:solid =
+windowtext 1.0pt;border-bottom:solid gray =
+1.0pt;border-right:none;background:red;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.75pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>11-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap style=3D'width:146.0pt;border:none;border-left:double =
+gray 2.25pt;background:red;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D121 nowrap style=3D'width:91.0pt;background:red;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D156 nowrap style=3D'width:117.0pt;background:red;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>&nbsp;<o:p></o:p></span></b=
+></p></td></tr><tr style=3D'height:14.4pt'><td width=3D83 nowrap =
+valign=3Dbottom style=3D'width:62.0pt;background:white;padding:0cm 3.5pt =
+0cm 3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border-top:none;border-left:solid =
+windowtext 1.0pt;border-bottom:solid gray =
+1.0pt;border-right:none;background:red;padding:0cm 3.5pt 0cm =
+3.5pt;height:14.4pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D195 =
+nowrap style=3D'width:146.0pt;border:none;border-left:double gray =
+2.25pt;background:red;padding:0cm 3.5pt 0cm 3.5pt;height:14.4pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D121 nowrap style=3D'width:91.0pt;background:red;padding:0cm =
+3.5pt 0cm 3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D156 nowrap style=3D'width:117.0pt;background:red;padding:0cm =
+3.5pt 0cm 3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>&nbsp;<o:p></o:p></span></b=
+></p></td></tr><tr style=3D'height:14.4pt'><td width=3D83 nowrap =
+valign=3Dbottom style=3D'width:62.0pt;background:white;padding:0cm 3.5pt =
+0cm 3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border-top:none;border-left:solid =
+windowtext 1.0pt;border-bottom:solid gray =
+1.0pt;border-right:none;background:red;padding:0cm 3.5pt 0cm =
+3.5pt;height:14.4pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>12-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap =
+style=3D'width:146.0pt;border-top:none;border-left:double gray =
+2.25pt;border-bottom:solid black =
+1.0pt;border-right:none;background:red;padding:0cm 3.5pt 0cm =
+3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D121 nowrap style=3D'width:91.0pt;border:none;border-bottom:solid =
+black 1.0pt;background:red;padding:0cm 3.5pt 0cm 3.5pt;height:14.4pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D156 nowrap =
+style=3D'width:117.0pt;border:none;border-bottom:solid black =
+1.0pt;background:red;padding:0cm 3.5pt 0cm 3.5pt;height:14.4pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>&nbsp;<o:p></o:p></span></b=
+></p></td></tr><tr style=3D'height:15.0pt'><td width=3D83 nowrap =
+valign=3Dbottom style=3D'width:62.0pt;background:white;padding:0cm 3.5pt =
+0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border:none;border-left:solid windowtext =
+1.0pt;background:red;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D195 =
+nowrap style=3D'width:146.0pt;border:none;border-left:double gray =
+2.25pt;background:red;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D121 nowrap style=3D'width:91.0pt;background:red;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D156 nowrap style=3D'width:117.0pt;background:red;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>&nbsp;<o:p></o:p></span></b=
+></p></td></tr><tr style=3D'height:14.4pt'><td width=3D83 nowrap =
+valign=3Dbottom style=3D'width:62.0pt;padding:0cm 3.5pt 0cm =
+3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:Sans;color:black;mso-fareast-langua=
+ge:FR'>LUNDI<o:p></o:p></span></b></p></td><td width=3D83 nowrap =
+style=3D'width:62.0pt;border:solid windowtext 1.0pt;padding:0cm 3.5pt =
+0cm 3.5pt;height:14.4pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>13-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+5<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border:solid windowtext =
+1.0pt;border-left:none;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border:solid windowtext =
+1.0pt;border-left:none;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>HARRIZ =
+Malik<o:p></o:p></span></b></p></td></tr><tr style=3D'height:15.0pt'><td =
+width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>13-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+5<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 3.5pt =
+0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>HARRIZ =
+Malik<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.75pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:Sans;color:black;mso-fareast-langua=
+ge:FR'>MARDI<o:p></o:p></span></b></p></td><td width=3D83 nowrap =
+style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>14-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+5<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>HARRIZ =
+Malik<o:p></o:p></span></b></p></td></tr><tr style=3D'height:15.0pt'><td =
+width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>14-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+5<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 3.5pt =
+0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>HARRIZ =
+Malik<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.75pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:Sans;color:black;mso-fareast-langua=
+ge:FR'>MERCREDI<o:p></o:p></span></b></p></td><td width=3D83 nowrap =
+style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>15-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>OpenClassrooms<o:p></o:p></=
+span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 3.5pt =
+0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Autonomie<o:p></o:p></span>=
+</b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.0pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>15-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>OpenClassrooms<o:p></o:p></=
+span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 3.5pt =
+0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Autonomie<o:p></o:p></span>=
+</b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>&nbsp;<o:p></o:p></span></b=
+></p></td></tr><tr style=3D'height:15.75pt'><td width=3D83 nowrap =
+valign=3Dbottom style=3D'width:62.0pt;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:Sans;color:black;mso-fareast-langua=
+ge:FR'>JEUDI<o:p></o:p></span></b></p></td><td width=3D83 nowrap =
+style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>16-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+5<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>HARRIZ =
+Malik<o:p></o:p></span></b></p></td></tr><tr style=3D'height:15.0pt'><td =
+width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>16-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+5<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 3.5pt =
+0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>HARRIZ =
+Malik<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.75pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:Sans;color:black;mso-fareast-langua=
+ge:FR'>VENDREDI<o:p></o:p></span></b></p></td><td width=3D83 nowrap =
+style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.75pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>17-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+5<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>HARRIZ =
+Malik<o:p></o:p></span></b></p></td></tr><tr style=3D'height:15.0pt'><td =
+width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>17-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+5<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 3.5pt =
+0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>HARRIZ =
+Malik<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.75pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border-top:none;border-left:solid =
+windowtext 1.0pt;border-bottom:solid gray =
+1.0pt;border-right:none;background:red;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.75pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>18-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap style=3D'width:146.0pt;border:none;border-left:double =
+gray 2.25pt;background:red;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D121 nowrap style=3D'width:91.0pt;background:red;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D156 nowrap style=3D'width:117.0pt;background:red;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>&nbsp;<o:p></o:p></span></b=
+></p></td></tr><tr style=3D'height:14.4pt'><td width=3D83 nowrap =
+valign=3Dbottom style=3D'width:62.0pt;background:white;padding:0cm 3.5pt =
+0cm 3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border-top:none;border-left:solid =
+windowtext 1.0pt;border-bottom:solid gray =
+1.0pt;border-right:none;background:red;padding:0cm 3.5pt 0cm =
+3.5pt;height:14.4pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D195 =
+nowrap style=3D'width:146.0pt;border:none;border-left:double gray =
+2.25pt;background:red;padding:0cm 3.5pt 0cm 3.5pt;height:14.4pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D121 nowrap style=3D'width:91.0pt;background:red;padding:0cm =
+3.5pt 0cm 3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D156 nowrap style=3D'width:117.0pt;background:red;padding:0cm =
+3.5pt 0cm 3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>&nbsp;<o:p></o:p></span></b=
+></p></td></tr><tr style=3D'height:14.4pt'><td width=3D83 nowrap =
+valign=3Dbottom style=3D'width:62.0pt;background:white;padding:0cm 3.5pt =
+0cm 3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border-top:none;border-left:solid =
+windowtext 1.0pt;border-bottom:solid gray =
+1.0pt;border-right:none;background:red;padding:0cm 3.5pt 0cm =
+3.5pt;height:14.4pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>19-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap =
+style=3D'width:146.0pt;border-top:none;border-left:double gray =
+2.25pt;border-bottom:solid black =
+1.0pt;border-right:none;background:red;padding:0cm 3.5pt 0cm =
+3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D121 nowrap style=3D'width:91.0pt;border:none;border-bottom:solid =
+black 1.0pt;background:red;padding:0cm 3.5pt 0cm 3.5pt;height:14.4pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D156 nowrap =
+style=3D'width:117.0pt;border:none;border-bottom:solid black =
+1.0pt;background:red;padding:0cm 3.5pt 0cm 3.5pt;height:14.4pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>&nbsp;<o:p></o:p></span></b=
+></p></td></tr><tr style=3D'height:15.0pt'><td width=3D83 nowrap =
+valign=3Dbottom style=3D'width:62.0pt;background:white;padding:0cm 3.5pt =
+0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border:none;border-left:solid windowtext =
+1.0pt;background:red;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D195 =
+nowrap style=3D'width:146.0pt;border:none;border-left:double gray =
+2.25pt;background:red;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D121 nowrap style=3D'width:91.0pt;background:red;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D156 nowrap style=3D'width:117.0pt;background:red;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>&nbsp;<o:p></o:p></span></b=
+></p></td></tr><tr style=3D'height:14.4pt'><td width=3D83 nowrap =
+valign=3Dbottom style=3D'width:62.0pt;padding:0cm 3.5pt 0cm =
+3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:Sans;color:black;mso-fareast-langua=
+ge:FR'>LUNDI<o:p></o:p></span></b></p></td><td width=3D83 nowrap =
+style=3D'width:62.0pt;border:solid windowtext 1.0pt;padding:0cm 3.5pt =
+0cm 3.5pt;height:14.4pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>20-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+5<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border:solid windowtext =
+1.0pt;border-left:none;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border:solid windowtext =
+1.0pt;border-left:none;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>HARRIZ =
+Malik<o:p></o:p></span></b></p></td></tr><tr style=3D'height:15.0pt'><td =
+width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>20-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+5<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 3.5pt =
+0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>HARRIZ =
+Malik<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.75pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:Sans;color:black;mso-fareast-langua=
+ge:FR'>MARDI<o:p></o:p></span></b></p></td><td width=3D83 nowrap =
+style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>21-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:#FCE4D6;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:red;mso-fareast-language:FR'>Accompagnement =
+emploi<o:p></o:p></span></b></p></td><td width=3D121 nowrap =
+valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:#FCE4D6;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:red;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></span=
+></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:#FCE4D6;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:red;mso-fareast-language:FR'>COURTINAT =
+B=E9n=E9dicte<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.0pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>21-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:#FCE4D6;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:red;mso-fareast-language:FR'>Accompagnement =
+emploi<o:p></o:p></span></b></p></td><td width=3D121 nowrap =
+valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:#FCE4D6;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:red;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></span=
+></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:#FCE4D6;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:red;mso-fareast-language:FR'>COURTINAT =
+B=E9n=E9dicte<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.75pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:Sans;color:black;mso-fareast-langua=
+ge:FR'>MERCREDI<o:p></o:p></span></b></p></td><td width=3D83 nowrap =
+style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>22-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+5<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Classe =
+virtuelle<o:p></o:p></span></b></p></td><td width=3D156 nowrap =
+valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>HARRIZ =
+Malik<o:p></o:p></span></b></p></td></tr><tr style=3D'height:15.0pt'><td =
+width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>22-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+5<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Classe =
+virtuelle<o:p></o:p></span></b></p></td><td width=3D156 nowrap =
+valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>HARRIZ =
+Malik<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.75pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:Sans;color:black;mso-fareast-langua=
+ge:FR'>JEUDI<o:p></o:p></span></b></p></td><td width=3D83 nowrap =
+style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>23-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+5<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>DELORME =
+Christian<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.0pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>23-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+4<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 3.5pt =
+0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>DELORME =
+Christian<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.75pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:Sans;color:black;mso-fareast-langua=
+ge:FR'>VENDREDI<o:p></o:p></span></b></p></td><td width=3D83 nowrap =
+style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.75pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>24-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+4<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>DELORME =
+Christian<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.0pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>24-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+4<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 3.5pt =
+0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>DELORME =
+Christian<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.75pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border-top:none;border-left:solid =
+windowtext 1.0pt;border-bottom:solid gray =
+1.0pt;border-right:none;background:red;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.75pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>25-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap style=3D'width:146.0pt;border:none;border-left:double =
+gray 2.25pt;background:red;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D121 nowrap style=3D'width:91.0pt;background:red;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D156 nowrap style=3D'width:117.0pt;background:red;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>&nbsp;<o:p></o:p></span></b=
+></p></td></tr><tr style=3D'height:14.4pt'><td width=3D83 nowrap =
+valign=3Dbottom style=3D'width:62.0pt;background:white;padding:0cm 3.5pt =
+0cm 3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border-top:none;border-left:solid =
+windowtext 1.0pt;border-bottom:solid gray =
+1.0pt;border-right:none;background:red;padding:0cm 3.5pt 0cm =
+3.5pt;height:14.4pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D195 =
+nowrap style=3D'width:146.0pt;border:none;border-left:double gray =
+2.25pt;background:red;padding:0cm 3.5pt 0cm 3.5pt;height:14.4pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D121 nowrap style=3D'width:91.0pt;background:red;padding:0cm =
+3.5pt 0cm 3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D156 nowrap style=3D'width:117.0pt;background:red;padding:0cm =
+3.5pt 0cm 3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>&nbsp;<o:p></o:p></span></b=
+></p></td></tr><tr style=3D'height:14.4pt'><td width=3D83 nowrap =
+valign=3Dbottom style=3D'width:62.0pt;background:white;padding:0cm 3.5pt =
+0cm 3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border-top:none;border-left:solid =
+windowtext 1.0pt;border-bottom:solid gray =
+1.0pt;border-right:none;background:red;padding:0cm 3.5pt 0cm =
+3.5pt;height:14.4pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>26-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap =
+style=3D'width:146.0pt;border-top:none;border-left:double gray =
+2.25pt;border-bottom:solid black =
+1.0pt;border-right:none;background:red;padding:0cm 3.5pt 0cm =
+3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D121 nowrap style=3D'width:91.0pt;border:none;border-bottom:solid =
+black 1.0pt;background:red;padding:0cm 3.5pt 0cm 3.5pt;height:14.4pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D156 nowrap =
+style=3D'width:117.0pt;border:none;border-bottom:solid black =
+1.0pt;background:red;padding:0cm 3.5pt 0cm 3.5pt;height:14.4pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>&nbsp;<o:p></o:p></span></b=
+></p></td></tr><tr style=3D'height:15.0pt'><td width=3D83 nowrap =
+valign=3Dbottom style=3D'width:62.0pt;background:white;padding:0cm 3.5pt =
+0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border:none;border-left:solid windowtext =
+1.0pt;background:red;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D195 =
+nowrap style=3D'width:146.0pt;border:none;border-left:double gray =
+2.25pt;background:red;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D121 nowrap style=3D'width:91.0pt;background:red;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td =
+width=3D156 nowrap style=3D'width:117.0pt;background:red;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>&nbsp;<o:p></o:p></span></b=
+></p></td></tr><tr style=3D'height:14.4pt'><td width=3D83 nowrap =
+valign=3Dbottom style=3D'width:62.0pt;padding:0cm 3.5pt 0cm =
+3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:Sans;color:black;mso-fareast-langua=
+ge:FR'>LUNDI<o:p></o:p></span></b></p></td><td width=3D83 nowrap =
+style=3D'width:62.0pt;border:solid windowtext 1.0pt;padding:0cm 3.5pt =
+0cm 3.5pt;height:14.4pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>27-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+6<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border:solid windowtext =
+1.0pt;border-left:none;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border:solid windowtext =
+1.0pt;border-left:none;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:14.4pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>HARRIZ =
+Malik<o:p></o:p></span></b></p></td></tr><tr style=3D'height:15.0pt'><td =
+width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>27-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+6<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 3.5pt =
+0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>HARRIZ =
+Malik<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.75pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:Sans;color:black;mso-fareast-langua=
+ge:FR'>MARDI<o:p></o:p></span></b></p></td><td width=3D83 nowrap =
+style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>28-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+6<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>HARRIZ =
+Malik<o:p></o:p></span></b></p></td></tr><tr style=3D'height:15.0pt'><td =
+width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>28-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+6<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 3.5pt =
+0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>HARRIZ =
+Malik<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.75pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:Sans;color:black;mso-fareast-langua=
+ge:FR'>MERCREDI<o:p></o:p></span></b></p></td><td width=3D83 nowrap =
+style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>29-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:#92D050;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Anglais<o:p></o:p></span></=
+b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:#92D050;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Classe =
+virtuelle<o:p></o:p></span></b></p></td><td width=3D156 nowrap =
+valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:#92D050;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>SUAREZ =
+Elisabeth<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.0pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>29-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+6<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 3.5pt =
+0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Classe =
+virtuelle<o:p></o:p></span></b></p></td><td width=3D156 nowrap =
+valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>HARRIZ =
+Malik<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.75pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:Sans;color:black;mso-fareast-langua=
+ge:FR'>JEUDI<o:p></o:p></span></b></p></td><td width=3D83 nowrap =
+style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>30-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+6<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>HARRIZ =
+Malik<o:p></o:p></span></b></p></td></tr><tr style=3D'height:15.0pt'><td =
+width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>30-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+6<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 3.5pt =
+0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>HARRIZ =
+Malik<o:p></o:p></span></b></p></td></tr><tr =
+style=3D'height:15.75pt'><td width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:Sans;color:black;mso-fareast-langua=
+ge:FR'>VENDREDI<o:p></o:p></span></b></p></td><td width=3D83 nowrap =
+style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.75pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>31-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.75pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+6<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.75pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>HARRIZ =
+Malik<o:p></o:p></span></b></p></td></tr><tr style=3D'height:15.0pt'><td =
+width=3D83 nowrap valign=3Dbottom =
+style=3D'width:62.0pt;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'font-size:10.0pt;font-family:"Arial",sans-serif;color:black;mso-=
+fareast-language:FR'>&nbsp;<o:p></o:p></span></b></p></td><td width=3D83 =
+nowrap style=3D'width:62.0pt;border:solid windowtext =
+1.0pt;border-top:none;background:white;padding:0cm 3.5pt 0cm =
+3.5pt;height:15.0pt'><p class=3DMsoNormal align=3Dcenter =
+style=3D'text-align:center'><b><span =
+style=3D'font-size:8.0pt;font-family:"Arial",sans-serif;color:black;mso-f=
+areast-language:FR'>31-janv.<o:p></o:p></span></b></p></td><td =
+width=3D195 nowrap valign=3Dbottom =
+style=3D'width:146.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm =
+3.5pt 0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>MODULE =
+6<o:p></o:p></span></b></p></td><td width=3D121 nowrap valign=3Dbottom =
+style=3D'width:91.0pt;border-top:none;border-left:none;border-bottom:soli=
+d windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 3.5pt =
+0cm 3.5pt;height:15.0pt'><p class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>Pr=E9sentiel<o:p></o:p></sp=
+an></b></p></td><td width=3D156 nowrap valign=3Dbottom =
+style=3D'width:117.0pt;border-top:none;border-left:none;border-bottom:sol=
+id windowtext 1.0pt;border-right:solid windowtext =
+1.0pt;background:white;padding:0cm 3.5pt 0cm 3.5pt;height:15.0pt'><p =
+class=3DMsoNormal><b><span =
+style=3D'color:black;mso-fareast-language:FR'>HARRIZ =
+Malik<o:p></o:p></span></b></p></td></tr></table><p =
+class=3DMsoNormal><o:p>&nbsp;</o:p></p></div></body></html>
+------=_NextPart_000_0059_01DB5DFA.CA17B4C0--
+
+
