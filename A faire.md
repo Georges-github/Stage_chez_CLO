@@ -199,10 +199,44 @@ FAIT le 2 juin 2025 Lorsque "Fixe :", etc. est vide, ne pas l'afficher.
 Fixtures : Les états successifs sont tous effectués par le même client.
 
 
-Ajouter du JS et savoir expliquer le fetch dans 'supprimer photo'.
+Ajouter du JS et savoir expliquer le fetch dans "supprimer photo".
 
 
 Maildev.
 
+
+Dans "EditerUnContrat.html.twig", retirer le code utilisant "form.nomContratActuel". Il est en commentaire pour le moment.
+
+
+Renommer les fichiers : "Unique..." en enevant le "Unique" .
+
+
+Passage en revue des pages :
+
+C:\Greta92\TP DWWM\VM-1\compte_client\
+
+templates\Security\login.html.twig OK
+
+templates\BackEnd\Administrateur\accueilAdministrateur.html.twig OK
+
+templates\BackEnd\Administrateur\listeDesEmployes.html.twig OK
+        templates\BackEnd\Administrateur\voirUnEmploye.html.twig OK
+        templates\BackEnd\Administrateur\EditerUnEmploye.html.twig OK
+
+templates\BackEnd\listeDesComptesClients.html.twig OK
+templates\FrontEnd\EditerUnCompteClient.html.twig OK
+        templates\FrontEnd\listeDesContrats.html.twig OK
+        templates\FrontEnd\EditerUnContrat.html.twig OK
+        templates\FrontEnd\voirUnContrat.html.twig OK
+
+templates\FrontEnd\AfficherFAC.html.twig OK
+        templates\FrontEnd\UniqueAjouterUnePublication.html.twig OK
+        templates\FrontEnd\UniqueEditerUnePublication.html.twig OK
+        templates\FrontEnd\AjouterUnCommentaire.html.twig OK
+
+
+Eléments supprimés :
+
+src\Controller\ContratControllerByCRUDController.php
 
 ```
